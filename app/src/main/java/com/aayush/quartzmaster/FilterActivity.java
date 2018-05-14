@@ -103,8 +103,11 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
                 dialogView = getLayoutInflater().inflate(R.layout.size_dialog, null);
                 ((CheckBox) dialogView.findViewById(R.id.qm_checkbox)).setChecked(
                         getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE).getBoolean("" + R.id.qm_checkbox, true));
+                ((CheckBox) dialogView.findViewById(R.id.qm_checkbox2)).setChecked(
+                        getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE).getBoolean("" + R.id.qm_checkbox2, true));
 
                 ((CheckBox) dialogView.findViewById(R.id.qm_checkbox)).setOnCheckedChangeListener(this);
+                ((CheckBox) dialogView.findViewById(R.id.qm_checkbox2)).setOnCheckedChangeListener(this);
                 launchDialog(mBottomSheetDialog, dialogView);
                 break;
         }
