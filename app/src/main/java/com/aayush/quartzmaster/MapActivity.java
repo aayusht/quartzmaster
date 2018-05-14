@@ -31,7 +31,7 @@ public class MapActivity extends AppCompatActivity {
             flags &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
             view.setSystemUiVisibility(flags);
         }
-        TextView addressTextView = (TextView) findViewById(R.id.address);
+        final TextView addressTextView = (TextView) findViewById(R.id.address);
         switch(getIntent().getStringExtra("location")) {
             case "Bayonne, NJ":
                 addressTextView.setText("101 E 2nd St\nBayonne, NJ 07002");
@@ -81,6 +81,11 @@ public class MapActivity extends AppCompatActivity {
                 addressTextView.setText("2800 Fairview Ave N\nRoseville, MN 55113");
                 phoneNumber = "tel:6514831576";
                 break;
+            case "Tucker, GA":
+                addressTextView.setText("2020 Weems Rd\nTucker GA 30084");
+                phoneNumber = "tel:8662166577";
+                emailAddress = "info@quartzmasteratl.com";
+                break;
             case "Toronto":
                 addressTextView.setText("200 Trowers Rd.,\nVaughan On Unit 5 L4L 5Z8");
                 phoneNumber = "tel:9058507889";
@@ -107,6 +112,7 @@ public class MapActivity extends AppCompatActivity {
                         if (!emailAddress.equals("")) {
                             Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
                                     "mailto", emailAddress, null));
+                            emailIntent.putExtra(Intent.EXTRA_TEXT, MainActivity.getFavoritesString(MapActivity.this));
                             startActivity(Intent.createChooser(emailIntent, "Send email..."));
                         } else {
                             Toast.makeText(MapActivity.this, "No email address found for this location!", Toast.LENGTH_SHORT).show();
@@ -118,6 +124,14 @@ public class MapActivity extends AppCompatActivity {
                 mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 mBottomSheetDialog.getWindow().setGravity(Gravity.BOTTOM);
                 mBottomSheetDialog.show();
+            }
+        });
+        findViewById(R.id.map).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse("https://maps.google.com/maps?q=" + addressTextView.getText().toString().replace('\n', '+').replace(' ', '+').replace("#", "")));
+                startActivity(i);
             }
         });
     }

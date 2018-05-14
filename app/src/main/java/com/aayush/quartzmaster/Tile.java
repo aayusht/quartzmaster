@@ -6,8 +6,7 @@ import java.io.Serializable;
  * Created by aayush on 10/21/17.
  */
 
-public class Tile implements Serializable{
-    String url;
+public class Tile implements Serializable {
     String collection;
     String name;
     String size;
@@ -15,9 +14,18 @@ public class Tile implements Serializable{
     int drawable1;
     int drawable2;
     int drawable3;
+    int drawable4;
+    int drawable5;
+    static final String MARBLE = "The Marble Collection";
+    static final String GRANITE = "Granite Look";
+    static final String LEATHER = "Leather Collection";
+    static final String SCENERY = "Scenery Series";
+    static final String SOUND = "Sound Series";
+    static final String STARLIGHT = "Starlight Series";
+    static final String MINERAL = "The Mineral Collection";
 
-    public Tile(String url, String collection, String name, String size, String thickness, int drawable1, int drawable2, int drawable3) {
-        this.url = url;
+    public Tile(String collection, String name, String size, String thickness,
+                int drawable1, int drawable2, int drawable3, int drawable4, int drawable5) {
         this.collection = collection;
         this.name = name;
         this.size = size;
@@ -25,18 +33,12 @@ public class Tile implements Serializable{
         this.drawable1 = drawable1;
         this.drawable2 = drawable2;
         this.drawable3 = drawable3;
+        this.drawable4 = drawable4;
+        this.drawable5 = drawable5;
     }
 
     public String getID() {
         return name.substring(0, name.indexOf(' ')).toLowerCase();
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
     public String getCollection() {
@@ -93,5 +95,21 @@ public class Tile implements Serializable{
 
     public void setDrawable3(int drawable3) {
         this.drawable3 = drawable3;
+    }
+
+    public int getDrawable4() {
+        return drawable4;
+    }
+
+    public void setDrawable4(int drawable4) {
+        this.drawable4 = drawable4;
+    }
+
+    public int getDrawable5() {
+        return drawable5;
+    }
+
+    public void setDrawable5(int drawable5) {
+        this.drawable5 = drawable5;
     }
 }

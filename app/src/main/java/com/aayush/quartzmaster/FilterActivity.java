@@ -35,11 +35,12 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.scenery:
             case R.id.granite:
             case R.id.sound:
+            case R.id.leather:
             case R.id.mineral:
             case R.id.thickness_checkbox:
             case R.id.finish_checkbox:
             case R.id.qm_checkbox:
-            case R.id.mc_checkbox:
+            case R.id.qm_checkbox2:
                 SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putBoolean("" + compoundButton.getId(), b);
@@ -66,6 +67,8 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
                         getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE).getBoolean("" + R.id.starlight, true));
                 ((CheckBox) dialogView.findViewById(R.id.scenery)).setChecked(
                         getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE).getBoolean("" + R.id.scenery, true));
+                ((CheckBox) dialogView.findViewById(R.id.leather)).setChecked(
+                        getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE).getBoolean("" + R.id.leather, true));
                 ((CheckBox) dialogView.findViewById(R.id.mineral)).setChecked(
                         getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE).getBoolean("" + R.id.mineral, true));
                 ((CheckBox) dialogView.findViewById(R.id.granite)).setChecked(
@@ -76,6 +79,7 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
                 ((CheckBox) dialogView.findViewById(R.id.marble)).setOnCheckedChangeListener(this);
                 ((CheckBox) dialogView.findViewById(R.id.starlight)).setOnCheckedChangeListener(this);
                 ((CheckBox) dialogView.findViewById(R.id.scenery)).setOnCheckedChangeListener(this);
+                ((CheckBox) dialogView.findViewById(R.id.leather)).setOnCheckedChangeListener(this);
                 ((CheckBox) dialogView.findViewById(R.id.mineral)).setOnCheckedChangeListener(this);
                 ((CheckBox) dialogView.findViewById(R.id.granite)).setOnCheckedChangeListener(this);
                 ((CheckBox) dialogView.findViewById(R.id.sound)).setOnCheckedChangeListener(this);
@@ -99,11 +103,8 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
                 dialogView = getLayoutInflater().inflate(R.layout.size_dialog, null);
                 ((CheckBox) dialogView.findViewById(R.id.qm_checkbox)).setChecked(
                         getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE).getBoolean("" + R.id.qm_checkbox, true));
-                ((CheckBox) dialogView.findViewById(R.id.mc_checkbox)).setChecked(
-                        getSharedPreferences(getString(R.string.preferences_key), Context.MODE_PRIVATE).getBoolean("" + R.id.mc_checkbox, true));
 
                 ((CheckBox) dialogView.findViewById(R.id.qm_checkbox)).setOnCheckedChangeListener(this);
-                ((CheckBox) dialogView.findViewById(R.id.mc_checkbox)).setOnCheckedChangeListener(this);
                 launchDialog(mBottomSheetDialog, dialogView);
                 break;
         }

@@ -70,6 +70,7 @@ public class MapAdapter extends RecyclerView.Adapter<MapAdapter.CustomViewHolder
             "Denver, CO",
             "Sterling, VA",
             "Roseville, MN",
+            "Tucker, GA",
             "Toronto"
     };
 }

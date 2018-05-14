@@ -2,9 +2,9 @@ package com.aayush.quartzmaster;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -17,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
-import android.widget.TextView;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
@@ -28,11 +27,12 @@ public class MainActivity extends AppCompatActivity {
             "" + R.id.scenery,
             "" + R.id.granite,
             "" + R.id.sound,
+            "" + R.id.leather,
             "" + R.id.mineral,
             "" + R.id.thickness_checkbox,
             "" + R.id.finish_checkbox,
             "" + R.id.qm_checkbox,
-            "" + R.id.mc_checkbox
+            "" + R.id.qm_checkbox2,
     };
 
     private FragmentManager fragmentManager;
@@ -43,18 +43,30 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            fragmentManager = getSupportFragmentManager();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             switch (item.getItemId()) {
                 case R.id.navigation_list:
                     fragment = ListFragment.getInstance(MainActivity.this);
                     currFragment = "list";
                     invalidateOptionsMenu();
+                    transaction.replace(R.id.content, fragment).commit();
+                    getSupportActionBar().setDisplayShowHomeEnabled(false);
+                    getSupportActionBar().setDisplayShowTitleEnabled(false);
+                    LayoutInflater mInflater = LayoutInflater.from(MainActivity.this);
+                    View mCustomView = mInflater.inflate(R.layout.main_actionbar, null);
+                    getSupportActionBar().setCustomView(mCustomView);
                     getSupportActionBar().setDisplayShowCustomEnabled(true);
+
+                    View v = getSupportActionBar().getCustomView();
+                    ViewGroup.LayoutParams lp = v.getLayoutParams();
+                    lp.width = ActionBar.LayoutParams.MATCH_PARENT;
+                    v.setLayoutParams(lp);
                     break;
                 case R.id.navigation_favorites:
                     fragment = FavoritesFragment.getInstance(MainActivity.this);
                     currFragment = "favorites";
                     invalidateOptionsMenu();
+                    transaction.replace(R.id.content, fragment).commit();
                     getSupportActionBar().setDisplayShowCustomEnabled(false);
                     getSupportActionBar().setDisplayShowTitleEnabled(true);
                     getSupportActionBar().setTitle("Favorites");
@@ -63,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
                     fragment = MapFragment.getInstance(MainActivity.this);
                     currFragment = "map";
                     invalidateOptionsMenu();
+                    transaction.replace(R.id.content, fragment).commit();
                     getSupportActionBar().setDisplayShowCustomEnabled(false);
                     getSupportActionBar().setDisplayShowTitleEnabled(true);
                     getSupportActionBar().setTitle("Locations");
@@ -71,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
                     fragment = AboutFragment.getInstance(MainActivity.this);
                     currFragment = "about";
                     invalidateOptionsMenu();
+                    transaction.replace(R.id.content, fragment).commit();
                     getSupportActionBar().setDisplayShowCustomEnabled(false);
                     getSupportActionBar().setDisplayShowTitleEnabled(true);
                     getSupportActionBar().setTitle("About Us");
@@ -78,9 +92,6 @@ public class MainActivity extends AppCompatActivity {
                 default:
                     return false;
             }
-
-            final FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.content, fragment).commit();
 
             return true;
         }
@@ -116,7 +127,10 @@ public class MainActivity extends AppCompatActivity {
         bnve.enableItemShiftingMode(false);
         bnve.setTextVisibility(false);
         bnve.setIconSize(30f, 30f);
-        bnve.setItemHeight(120);
+        bnve.setItemHeight(150);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            bnve.setItemHeight(90);
+        }
 
         clearFilters(this);
     }
@@ -128,8 +142,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
-        if (currFragment != "about") {
+        if (currFragment.equals("list")) {
 
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.options_menu, menu);
@@ -138,7 +157,21 @@ public class MainActivity extends AppCompatActivity {
             searchItem.collapseActionView();
 
             if (currFragment.equals("about") || currFragment.equals("favorites")|| currFragment.equals("map"))searchItem.setVisible(false);
-            else searchItem.setVisible(true);
+            else {
+                searchItem.setVisible(true);
+                ActionBar mActionBar = getSupportActionBar();
+                mActionBar.setDisplayShowHomeEnabled(false);
+                mActionBar.setDisplayShowTitleEnabled(false);
+                LayoutInflater mInflater = LayoutInflater.from(this);
+                View mCustomView = mInflater.inflate(R.layout.main_actionbar, null);
+                mActionBar.setCustomView(mCustomView);
+                mActionBar.setDisplayShowCustomEnabled(true);
+
+                View v = mActionBar.getCustomView();
+                ViewGroup.LayoutParams lp = v.getLayoutParams();
+                lp.width = ActionBar.LayoutParams.MATCH_PARENT;
+                v.setLayoutParams(lp);
+            }
 
             SearchView searchView = (android.widget.SearchView) searchItem.getActionView();
             searchView.setMaxWidth(Integer.MAX_VALUE);
@@ -208,5 +241,19 @@ public class MainActivity extends AppCompatActivity {
             editor.putBoolean(key, true);
             editor.commit();
         }
+    }
+
+    public static String getFavoritesString(Context context) {
+        String s = "";
+        for (Tile tile : TileAdapter.tiles) {
+            if (context.getSharedPreferences(context.getString(R.string.preferences_key),
+                    Context.MODE_PRIVATE).getInt(tile.getID(), 0) == 1) {
+                s += tile.getName() + "\n";
+            }
+        }
+        if (s.equals("")) {
+            return s;
+        }
+        return "My favorite tiles:\n" + s;
     }
 }
